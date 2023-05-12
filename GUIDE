@@ -1,0 +1,61 @@
+Start Cloud Shell
+Click the Cloud Shell icon (>_) in the upper right.
+Select Bash.
+Click Show advanced settings.
+Change Cloud Shell Region to the same location as your lab provided resource group.
+For Storage account, select Use existing.
+For File share, select Create new and give it a name of "fileshare".
+Click Create storage.
+Set Resource Variables in Cloud Shell
+Set the ACR (Azure Container Registry) variable. You can use any unique meaningful name for the "<ACR_NAME>":
+ACR="<ACR_NAME>"
+In the Azure portal, click the listed resource group name.
+
+Copy it to your clipboard.
+
+In Cloud Shell, set the RG variable, replacing <RESOURCE_GROUP_NAME> with the name you just copied:
+
+RG="<RESOURCE_GROUP_NAME>"
+Create a New Container Registry
+Create a new Azure Container Registry:
+
+az acr create --resource-group $RG --name $ACR --sku Basic --admin-enabled true
+Build an Image and Push to ACR
+Change the directory to clouddrive:
+
+cd /home/cloud/clouddrive
+Clone the js-docker branch of the github repository:
+
+git clone --branch js-docker https://github.com/linuxacademy/content-AZ-104-Microsoft-Azure-Administrator.git ./js-docker
+Change the directory to js-docker:
+
+cd js-docker/
+Build and push the image to Azure Container Registry using ACR Tasks and the Dockerfile provided (<IMAGE_NAME> can be anything you like e.g. js-docker:v1):
+
+az acr build --image <IMAGE_NAME> --registry $ACR --file Dockerfile .
+In the Azure portal, refresh All resources to view the newly created container registry with the js-docker repository and image.
+
+Create and Deploy a New Web App
+In the Azure portal, open the upper left menu and click App Services.
+
+In the upper left, click +Create.
+
+On the Create Web App page, set the following values:
+
+Resource Group: Existing resource group
+Name: Unique name
+Publish: Docker Container
+In Sku and size, click Change size.
+
+Click See additional options and select the Standard S1 size.
+
+Click Apply.
+
+Click Next: Docker.
+
+In Image Source, select Azure Container Registry, make sure your image is selected and click Review + create.
+
+Once the web app has successfully been deployed, click Go to resource, copy the provided URL, and load the URL in the browser to see your new web app.
+
+Conclusion
+Congratulations — you've completed this hands-on lab!
